@@ -40,14 +40,14 @@ _G.auto_rebirth = false
 _G.rebirth_amount = 1
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
-local function autoClick()
+function autoClick()
 	while _G.auto_tap == true do
 		game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("ClickService"):WaitForChild("Click"):FireServer(9999)
 		task.wait()
 	end
 end
 
-local function rebirth()
+function Rebirth()
 	while _G.auto_rebirth == true do
 		game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("RebirthService"):WaitForChild("BuyRebirths"):FireServer(_G.rebirth_amount)
 	end
@@ -80,9 +80,8 @@ local Dropdown_Rebirth = Farm:CreateDropdown({
 	MultipleOptions = false,
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Options)
-		print(Options[1])
-		--[[_G.rebirth_amount = Options[1]
-		rebirth()]]
+		_G.rebirth_amount = Options[1]
+		Rebirth()
 	end,
 })
 
@@ -91,8 +90,8 @@ local Toggle_Rebirth = Farm:CreateToggle({
 	CurrentValue = false,
 	Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
-		--[[_G.auto_rebirth = Value
-		rebirth()]]
+		_G.auto_rebirth = Value
+		Rebirth()
 	end,
 })
 
