@@ -49,7 +49,9 @@ end
 
 function Rebirth()
 	while _G.auto_rebirth == true do
-		game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("RebirthService"):WaitForChild("BuyRebirths"):FireServer(_G.rebirth_amount)
+		local isNumber = tonumber(_G.rebirth_amount)
+		if not isNumber then return end
+		game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("RebirthService"):WaitForChild("BuyRebirths"):FireServer(tonumber(_G.rebirth_amount))
 		wait(2)
 	end
 
@@ -73,6 +75,19 @@ local Toggle_Click = Farm:CreateToggle({
 })
 
 local Section_Rebirth = Farm:CreateSection("Rebirth")
+
+local Input_Rebirth = Farm:CreateInput({
+	Name = "Enter Auto_Rebirth Amount",
+	CurrentValue = "",
+	PlaceholderText = "Number",
+	RemoveTextAfterFocusLost = false,
+	Flag = "Input1",
+	Callback = function(Text)
+		_G.rebirth_amount = Text
+		print(_G.rebirth_amount)
+		Rebirth()
+	end,
+})
 
 local Dropdown_Rebirth = Farm:CreateDropdown({
 	Name = "Select Auto_Rebirth Amount",
