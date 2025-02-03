@@ -40,7 +40,7 @@ local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
 local function autoClick()
 	while _G.auto_tap == true do
-		game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ClickService"):WaitForChild("RF"):WaitForChild("Click"):InvokeServer()
+		game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("ClickService"):WaitForChild("Click"):FireServer(1)
 		task.wait()
 	end
 end
