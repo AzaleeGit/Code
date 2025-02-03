@@ -89,18 +89,6 @@ local Input_Rebirth = Farm:CreateInput({
 	end,
 })
 
---[[local Dropdown_Rebirth = Farm:CreateDropdown({
-	Name = "Select Auto_Rebirth Amount",
-	Options = {"1","10","100", "1000", "10000"},
-	CurrentOption = {"1"},
-	MultipleOptions = false,
-	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Options)
-		_G.rebirth_amount = Options[1]
-		print(_G.rebirth_amount)
-		Rebirth()
-	end,
-})]]
 
 local Toggle_Rebirth = Farm:CreateToggle({
 	Name = "Auto_Rebirth",
