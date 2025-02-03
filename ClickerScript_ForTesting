@@ -39,26 +39,25 @@ _G.a_click = false
 _G.a_collect = false
 local _player = game:GetService("Players").LocalPlayer
  --FUNCTIONS--
- function CollectGems(value)
-   local Gems = game.Workspace.Gems:GetChildren()
-   if not Gems then return end
-   for i, v in pairs(Gems) do
-      local isMesh = v:IsA("MeshPart")
-      local hasTouchInterest = v:FindFirstChild("TouchInterest")
-      if not isMesh or not hasTouchInterest then continue end
+function CollectGems(value)
+    if value == false then return end
+    local Gems = game.Workspace.Gems:GetChildren()
+    if not Gems then return end
+    for i, v in pairs(Gems) do
+        local isMesh = v:IsA("MeshPart")
+        local hasTouchInterest = v:FindFirstChild("TouchInterest")
+        if not isMesh or not hasTouchInterest then continue end
 
-      while value == true do
-         _player.Character.HumanoidRootPart.CFrame = v.CFrame
-         wait(1)
-      end
-   end
- end
+        _player.Character.HumanoidRootPart.CFrame = v.CFrame
+        wait(.2)
+    end
+end
 
- function Click(value)
+function Click(value)
    while value == true do
       game:GetService("ReplicatedStorage").Tap:InvokeServer(true)
    end
- end
+end
 
  local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
 
