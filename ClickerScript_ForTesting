@@ -45,7 +45,7 @@ _G.player = game.Players.LocalPlayer
       local isMesh = v:IsA("MeshPart")
       local hasTouchInterest = v:FindFirstChild("TouchInterest")
       if isMesh and hasTouchInterest then
-         firetouchinterest(_G.player.Character.Head, v, 0)
+         firetouchinterest(_G.Player.Character.Head, v, 0)
       end
    end
  end
