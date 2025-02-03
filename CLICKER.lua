@@ -45,6 +45,10 @@ local function autoClick()
 	end
 end
 
+local function Rebirth100()
+	game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("RebirthService"):WaitForChild("BuyRebirths"):FireServer(100)
+end
+
 --CREATING TAB--
 
 local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
@@ -58,6 +62,13 @@ local Click = Farm:CreateToggle({
 	Callback = function(Value)
 		_G.auto_tap = Value
 		autoClick()
+	end,
+})
+
+local Rebirth = Farm:CreateButton({
+	Name = "Rebirth",
+	Callback = function()
+		Rebirth100()
 	end,
 })
 
