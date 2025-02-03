@@ -43,7 +43,7 @@ _G.player = game.Players.LocalPlayer
    local Gems = game.Workspace.Gems:GetChildren()
    for i, v in pairs(Gems) do
       local isMesh = v:IsA("MeshPart")
-      local hasTouchInterest = v.FindFirstChild("TouchInterest")
+      local hasTouchInterest = v:FindFirstChild("TouchInterest")
       if isMesh and hasTouchInterest then
          firetouchinterest(_G.player.Character.Head, v, 0)
       end
