@@ -52,8 +52,9 @@ end
 --CREATING TAB--
 
 local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
+local developement = Window:CreateTab("Developement", 4483362458) --Creating a window
 
-local Clicking = Farm:CreateSection("Click") -- a Tab
+local Clicking = Farm:CreateSection("Farm")
 
 local Click = Farm:CreateToggle({
 	Name = "Auto_Click",
@@ -65,14 +66,21 @@ local Click = Farm:CreateToggle({
 	end,
 })
 
-local Rebirth = Farm:CreateButton({
-	Name = "Rebirth",
-	Callback = function()
-		Rebirth100()
+local Rebirth = Farm:CreateSection("Rebirth")
+
+local Dropdown = Farm:CreateDropdown({
+	Name = "Select AutoReborthAmount",
+	Options = {"1","10","100", "1000", "10000"},
+	CurrentOption = {"Option 1"},
+	MultipleOptions = false,
+	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Options)
+		print(Options)
 	end,
 })
 
-local UpdateHUB = Farm:CreateButton({
+
+local UpdateHUB = developement:CreateButton({
 	Name = "UpdateHUB",
 	Callback = function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/AzaleeGit/Code/refs/heads/main/CLICKER.lua"))()
