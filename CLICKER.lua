@@ -50,6 +50,7 @@ end
 function Rebirth()
 	while _G.auto_rebirth == true do
 		game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("RebirthService"):WaitForChild("BuyRebirths"):FireServer(_G.rebirth_amount)
+		task.wait()
 	end
 	
 end
