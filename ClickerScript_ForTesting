@@ -65,14 +65,16 @@ _G.player = game.Players.LocalPlayer
     end,
  })
 
+
+
  local AutoCollectAllGems = Farm:CreateToggle({
-   Name = "AutoCollectGems",
+   Name = "AutoCollectGems Example",
    CurrentValue = false,
-   Flag = "A_CollectGems",
+   Flag = "A_CollectGems", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
       while Value ~= false do
          CollectGems()
          wait(1)
       end
-   end
- })
+   end,
+})
