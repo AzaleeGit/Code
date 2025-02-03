@@ -47,7 +47,7 @@ function CollectGems()
 			local isMesh = v:IsA("MeshPart")
 			local hasTouchInterest = v:FindFirstChild("TouchInterest")
 			if not isMesh or not hasTouchInterest then continue end
-			
+
 			if _G.a_collect == true then
 				_player.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0, 5, 0)
 			end 
@@ -62,28 +62,15 @@ function Click()
 	end
 end
 
+--CREATING TAB--
+
 local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
 
 local Clicking = Farm:CreateSection("Click") -- a Tab
 
-local AutoClick = Farm:CreateToggle({ -- toggle section
-	Name = "AutoClicker",
-	CurrentValue = false,
-	Flag = "A_Clicker", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		_G.a_click = Value
-		Click()
-	end,
-})
-
-
-
-local AutoCollectGems = Farm:CreateToggle({
-	Name = "AutoCollectGems",
-	CurrentValue = false,
-	Flag = "A_CollectGems", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		_G.a_collect = Value
-		CollectGems()
+local Button = Clicking:CreateButton({
+	Name = "Button Example",
+	Callback = function()
+		game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("TaskService"):WaitForChild("RF"):WaitForChild("ClaimReward"):InvokeServer("Coins", 2)
 	end,
 })
