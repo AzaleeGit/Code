@@ -35,32 +35,9 @@ local Window = Rayfield:CreateWindow({
 })
 
 --VALUE--
-_G.a_click = false
-_G.a_collect = false
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
-function CollectGems()
-	local Gems = game.Workspace.Gems:GetChildren()
-	if not Gems then return end
-	while _G.a_collect == true do
-		for i, v in pairs(Gems) do
-			local isMesh = v:IsA("MeshPart")
-			local hasTouchInterest = v:FindFirstChild("TouchInterest")
-			if not isMesh or not hasTouchInterest then continue end
 
-			if _G.a_collect == true then
-				_player.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0, 5, 0)
-			end 
-			wait(.5)
-		end
-	end
-end
-
-function Click()
-	while _G.a_click == true do
-		game:GetService("ReplicatedStorage").Tap:InvokeServer(true)
-	end
-end
 
 --CREATING TAB--
 
@@ -71,7 +48,7 @@ local Clicking = Farm:CreateSection("Click") -- a Tab
 local Quest = Farm:CreateButton({
 	Name = "FinishQuest",
 	Callback = function()
-		game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("TaskService"):WaitForChild("RF"):WaitForChild("ClaimReward"):InvokeServer("Coins", 2)
+		game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("TaskService"):WaitForChild("RF"):WaitForChild("ClaimReward"):InvokeServer("Hatch", 1)
 	end,
 })
 
