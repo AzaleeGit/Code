@@ -42,14 +42,15 @@ local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
 function autoClick()
 	while _G.auto_tap == true do
-		game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("ClickService"):WaitForChild("Click"):FireServer(9999)
+		game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("ClickService"):WaitForChild("Click"):FireServer(math.huge)
 		task.wait()
 	end
 end
 
 function Rebirth()
-	if _G.auto_rebirth == true then
+	while _G.auto_rebirth == true do
 		game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("RebirthService"):WaitForChild("BuyRebirths"):FireServer(_G.rebirth_amount)
+		wait(5)
 	end
 
 end
