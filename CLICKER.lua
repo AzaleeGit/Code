@@ -47,7 +47,7 @@ local function autoClick()
 	end
 end
 
-local function Rebirth()
+local function rebirth()
 	while _G.auto_rebirth == true do
 		game:GetService("ReplicatedStorage"):WaitForChild("Aero"):WaitForChild("AeroRemoteServices"):WaitForChild("RebirthService"):WaitForChild("BuyRebirths"):FireServer(_G.rebirth_amount)
 	end
@@ -59,9 +59,9 @@ end
 local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
 local developement = Window:CreateTab("Developement", 4483362458) --Creating a window
 
-local Clicking = Farm:CreateSection("Farm")
+local Section_Click = Farm:CreateSection("Farm")
 
-local Click = Farm:CreateToggle({
+local Toggle_Click = Farm:CreateToggle({
 	Name = "Auto_Click",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -71,9 +71,9 @@ local Click = Farm:CreateToggle({
 	end,
 })
 
-local Rebirth = Farm:CreateSection("Rebirth")
+local Section_Rebirth = Farm:CreateSection("Rebirth")
 
-local RebirthDropdown = Farm:CreateDropdown({
+local Dropdown_Rebirth = Farm:CreateDropdown({
 	Name = "Select Auto_Rebirth Amount",
 	Options = {"1","10","100", "1000", "10000"},
 	CurrentOption = {"1"},
@@ -81,22 +81,22 @@ local RebirthDropdown = Farm:CreateDropdown({
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Options)
 		_G.rebirth_amount = Options[1]
-		Rebirth()
+		rebirth()
 	end,
 })
 
-local Rebirth = Farm:CreateToggle({
+local Toggle_Rebirth = Farm:CreateToggle({
 	Name = "Auto_Rebirth",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
 		_G.auto_rebirth = Value
-		Rebirth()
+		rebirth()
 	end,
 })
 
 
-local UpdateHUB = developement:CreateButton({
+local button_UpdateHUB = developement:CreateButton({
 	Name = "UpdateHUB",
 	Callback = function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/AzaleeGit/Code/refs/heads/main/CLICKER.lua"))()
