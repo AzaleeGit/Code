@@ -35,9 +35,15 @@ local Window = Rayfield:CreateWindow({
 })
 
 --VALUE--
+_G.auto_tap = false
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
-
+local function autoClick()
+	while _G.auto_tap == true do
+		game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ClickService"):WaitForChild("RF"):WaitForChild("Click"):InvokeServer()
+		task.wait()
+	end
+end
 
 --CREATING TAB--
 
@@ -45,16 +51,20 @@ local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
 
 local Clicking = Farm:CreateSection("Click") -- a Tab
 
-local Quest = Farm:CreateButton({
-	Name = "FinishQuest",
-	Callback = function()
-		game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("TaskService"):WaitForChild("RF"):WaitForChild("ClaimReward"):InvokeServer("Hatch", 1)
+local Click = Farm:CreateToggle({
+	Name = "Auto_Click",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		_G.auto_tap = Value
+		autoClick()
 	end,
 })
 
-local DESTROY = Farm:CreateButton({
-	Name = "DESTROY",
+local UpdateHUB = Farm:CreateButton({
+	Name = "UpdateHUB",
 	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/AzaleeGit/Code/refs/heads/main/CLICKER.lua"))()
 		Rayfield:Destroy()
 	end,
 })
