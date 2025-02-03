@@ -50,12 +50,12 @@ function CollectGems(value)
     local Gems = game.Workspace.Gems:GetChildren()
     if not Gems then return end
     while value == true do
-        local connection = for i, v in pairs(Gems) do
+        connection = for i, v in pairs(Gems) do
             local isMesh = v:IsA("MeshPart")
             local hasTouchInterest = v:FindFirstChild("TouchInterest")
             if not isMesh or not hasTouchInterest then continue end
     
-            _player.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0, 2, 0)
+            player.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0, 2, 0)
             wait(.5)
         end
     end
@@ -66,7 +66,7 @@ function Click(value)
     local connection
     if value == false then
         if connection then
-            connection:Disconnect
+            connection:Disconnect()
             return
         end
     end
