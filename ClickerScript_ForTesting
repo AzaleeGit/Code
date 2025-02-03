@@ -41,14 +41,15 @@ local _player = game:GetService("Players").LocalPlayer
  --FUNCTIONS--
  function CollectGems(value)
    local Gems = game.Workspace.Gems:GetChildren()
+   if not Gems then return end
    for i, v in pairs(Gems) do
       local isMesh = v:IsA("MeshPart")
       local hasTouchInterest = v:FindFirstChild("TouchInterest")
-      if isMesh and hasTouchInterest then
-         while value == true do
-            _player.Character.HumanoidRootPart.CFrame = v.CFrame
-            wait(.2)
-         end
+      if not isMesh or not hasTouchInterest then continue end
+
+      while value == true do
+         _player.Character.HumanoidRootPart.CFrame = v.CFrame
+         wait(1)
       end
    end
  end
@@ -64,14 +65,12 @@ local _player = game:GetService("Players").LocalPlayer
  local Clicking = Farm:CreateSection("Click") -- a Tab
 
  local AutoClick = Farm:CreateToggle({ -- toggle section
-    Name = "AutoClicker",
-    CurrentValue = false,
-    Flag = "A_Clicker", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-    Callback = function(Value)
-      if Value == true then
-         Click(Value)
-      end
-    end,
+   Name = "AutoClicker",
+   CurrentValue = false,
+   Flag = "A_Clicker", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+    Click(Value)
+   end,
  })
 
 
@@ -81,8 +80,6 @@ local _player = game:GetService("Players").LocalPlayer
    CurrentValue = false,
    Flag = "A_CollectGems", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
-      while Value == true do
-         CollectGems()
-      end
+    CollectGems(Value)
    end,
 })
