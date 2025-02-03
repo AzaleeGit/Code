@@ -35,22 +35,28 @@ local Window = Rayfield:CreateWindow({
  })
 
  --VALUE--
+_G.a_click = false
+_G.a_collect = false
 local _player = game:GetService("Players").LocalPlayer
  --FUNCTIONS--
- function CollectGems()
+ function CollectGems(value)
    local Gems = game.Workspace.Gems:GetChildren()
    for i, v in pairs(Gems) do
       local isMesh = v:IsA("MeshPart")
       local hasTouchInterest = v:FindFirstChild("TouchInterest")
       if isMesh and hasTouchInterest then
-         print(_player.DisplayName)
-         firetouchinterest(_player.Character.Head, v, 0)
+         while value == true do
+            _player.Character.HumanoidRootPart.CFrame = v.CFrame
+            wait(.2)
+         end
       end
    end
  end
 
- function Click()
-   game:GetService("ReplicatedStorage").Tap:InvokeServer(true)
+ function Click(value)
+   while value == true do
+      game:GetService("ReplicatedStorage").Tap:InvokeServer(true)
+   end
  end
 
  local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
@@ -63,9 +69,7 @@ local _player = game:GetService("Players").LocalPlayer
     Flag = "A_Clicker", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Value)
       if Value == true then
-         while Value do
-            Click()
-         end
+         Click(Value)
       end
     end,
  })
@@ -77,9 +81,8 @@ local _player = game:GetService("Players").LocalPlayer
    CurrentValue = false,
    Flag = "A_CollectGems", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
-      while Value ~= false do
+      while Value == true do
          CollectGems()
-         wait(1)
       end
    end,
 })
