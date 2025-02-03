@@ -68,7 +68,7 @@ local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
 
 local Clicking = Farm:CreateSection("Click") -- a Tab
 
-local Button = Clicking:CreateButton({
+local Button = Farm:CreateButton({
 	Name = "Button Example",
 	Callback = function()
 		game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("TaskService"):WaitForChild("RF"):WaitForChild("ClaimReward"):InvokeServer("Coins", 2)
