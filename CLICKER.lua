@@ -71,11 +71,11 @@ local Rebirth = Farm:CreateSection("Rebirth")
 local Dropdown = Farm:CreateDropdown({
 	Name = "Select AutoReborthAmount",
 	Options = {"1","10","100", "1000", "10000"},
-	CurrentOption = {"Option 1"},
+	CurrentOption = {"1"},
 	MultipleOptions = false,
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Options)
-		print(Options)
+		print(unpack(Options))
 	end,
 })
 
