@@ -37,9 +37,9 @@ local Window = Rayfield:CreateWindow({
 
  local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
 
- local Clicking = Farm:CreateSection("caca") -- a Tab
+ local Clicking = Farm:CreateSection("Click") -- a Tab
 
- local ClickToggle = Clicking:CreateToggle({ -- toggle section
+ local ClickToggle = Farm:CreateToggle({ -- toggle section
     Name = "AutoClicker",
     CurrentValue = false,
     Flag = "A_Clicker", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
