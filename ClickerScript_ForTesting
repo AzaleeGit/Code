@@ -1,5 +1,5 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-print(game.GameId)
+
 
 local Window = Rayfield:CreateWindow({
     Name = "ClickerGame",
@@ -35,11 +35,25 @@ local Window = Rayfield:CreateWindow({
     }
  })
 
+ --VALUE--
+_G.player = game.Players.LocalPlayer
+
+ --FUNCTIONS--
+ function CollectGems()
+   local Gems = game.Workspace.Gems:GetChildren()
+   for i, v in pairs(Gems) do
+      local isMesh = v:IsA("MeshPart")
+      local hasTouchInterest = v.FindFirstChild("TouchInterest")
+      if isMesh and hasTouchInterest then
+         firetouchinterest(_G.player.Character.Head, v, 0)
+   end
+ end
+
  local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
 
  local Clicking = Farm:CreateSection("Click") -- a Tab
 
- local ClickToggle = Farm:CreateToggle({ -- toggle section
+ local AutoClick = Farm:CreateToggle({ -- toggle section
     Name = "AutoClicker",
     CurrentValue = false,
     Flag = "A_Clicker", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -48,4 +62,16 @@ local Window = Rayfield:CreateWindow({
             game:GetService("ReplicatedStorage").Tap:InvokeServer(true)
         end
     end,
+ })
+
+ local AutoCollectAllGems = Farm:CreateToggle({
+   Name = "AutoCollectGems",
+   CurrentValue = false,
+   Flag = "A_CollectGems",
+   Callback = function(Value)
+      while Value ~= false do
+         CollectGems()
+         wait(1)
+      end
+   end
  })
