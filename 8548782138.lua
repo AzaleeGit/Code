@@ -38,10 +38,12 @@ local MAIN = Rayfield:CreateWindow({
 getgenv().auto_tap = false
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
-local function auto_click()
-	while getgenv().auto_tap == true do
-		game:GetService("ReplicatedStorage"):WaitForChild("TappingRemote"):WaitForChild("Tap"):FireServer()
-		wait(1)
+function auto_click()
+	while task.wait(.5) do
+		if getgenv().auto_tap == true then
+			game:GetService("ReplicatedStorage"):WaitForChild("TappingRemote"):WaitForChild("Tap"):FireServer()
+		end
+
 	end
 end
 
