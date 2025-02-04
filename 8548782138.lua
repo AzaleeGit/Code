@@ -34,11 +34,6 @@ local Window = Rayfield:CreateWindow({
 	}
 })
 
-
-if game.GameId ~= 8548782138 then
-	Rayfield:Destroy()
-end
-
 --VALUE--
 --[[getgenv().auto_tap = false
 local _player = game:GetService("Players").LocalPlayer
@@ -51,9 +46,3 @@ local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
 local developement = Window:CreateTab("Developement", 4483362458) --Creating a window
 
 local Section_Click = Farm:CreateSection("Farm")
-
-
-
-
-
-Rayfield:LoadConfiguration()
