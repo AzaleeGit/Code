@@ -36,14 +36,23 @@ local MAIN = Rayfield:CreateWindow({
 
 --VALUE--
 getgenv().auto_tap = false
+getgenv().amount_rebirth = 1
+getgenv().auto_rebirth = false
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
 function auto_click()
-	while task.wait() do
+	while task.wait(0.000000001) do
 		if getgenv().auto_tap == true then
 			game:GetService("ReplicatedStorage"):WaitForChild("TappingRemote"):WaitForChild("Tap"):FireServer()
 		end
+	end
+end
 
+function rebirth()
+	while task.wait(1) do
+		if getgenv().auto_rebirth == true then
+			game:GetService("ReplicatedStorage"):WaitForChild("Rebirth"):FireServer(tonumber(getgenv().amount_rebirth))
+		end
 	end
 end
 
@@ -61,6 +70,28 @@ local toggle_autoClick = Farm:CreateToggle({
 	Callback = function(Value)
 		getgenv().auto_tap = Value
 		auto_click()
+	end,
+})
+
+local input_rebirth = Farm:CreateInput({
+	Name = "Enter Auto_Rebirth Amount",
+	CurrentValue = "",
+	PlaceholderText = "rebirth",
+	RemoveTextAfterFocusLost = false,
+	Flag = "Input1",
+	Callback = function(Text)
+		getgenv().amount_rebirth = Text
+		rebirth()
+	end,
+})
+
+local toggle_autoRebirth = Farm:CreateToggle({
+	Name = "Auto_Rebirth",
+	CurrentValue = false,
+	Flag = "Toggle2",
+	CallBack = function(Value)
+		getgenv().auto_rebirth = Value
+		rebirth()
 	end,
 })
 
