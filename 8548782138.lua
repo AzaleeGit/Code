@@ -1,13 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-if game.GameId ~= 8548782138 then
-	Rayfield:Destroy()
-end
-
-
-
 local Window = Rayfield:CreateWindow({
-	Name = "8548782138",
+	Name = "Game",
 	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
 	LoadingTitle = "Loading HUB",
 	LoadingSubtitle = "by EElAZA",
@@ -40,6 +34,9 @@ local Window = Rayfield:CreateWindow({
 	}
 })
 
+if game.GameId ~= 8548782138 then
+	Rayfield:Destroy()
+end
 
 --VALUE--
 getgenv().auto_tap = false
