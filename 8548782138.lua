@@ -38,6 +38,9 @@ local MAIN = Rayfield:CreateWindow({
 getgenv().auto_tap = false
 getgenv().amount_rebirth = "1"
 getgenv().auto_rebirth = false
+getgenv().egg_toHatch = "Basic Egg"
+getgenv().auto_hatch = false
+
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
 function auto_click()
@@ -59,13 +62,26 @@ function rebirth()
 	end
 end
 
+function auto_hatch()
+	while task.wait(0.1) do
+		if getgenv().auto_hatch == true then
+			local findEgg = workspace:WaitForChild("Eggs"):WaitForChild(getgenv().egg_toHatch)
+			if not findEgg then return end
+			game:GetService("ReplicatedStorage"):WaitForChild("EggHatchingRemote"):WaitForChild("HatchServer"):InvokeServer(workspace:WaitForChild("Eggs"):WaitForChild(getgenv().egg_toHatch))
+		end
+	end
+end
+
+
 --WINDOW--
 local Farm = MAIN:CreateTab("Farming", 4483362458) --Creating a window
 local developement = MAIN:CreateTab("Developement", 4483362458) --Creating a window
 
-local Section_Farm = Farm:CreateSection("Farm")
---FARM TAB--a
+
+--FARM TAB--
 --FARM SECTION--
+local Section_Farm = Farm:CreateSection("Farm")
+
 local toggle_autoClick = Farm:CreateToggle({
 	Name = "Auto_Click",
 	CurrentValue = false,
@@ -98,6 +114,30 @@ local toggle_autoRebirth = Farm:CreateToggle({
 	end,
 })
 
+--EGG SECTION--
+local Section_Egg = Farm:CreateSection("Egg")
+
+local dropdown_egg  = Farm:CreateDropdown({
+	Name = "Egg to hatch",
+	Options = {"Basic Egg","Beach Egg"},
+	CurrentOption = {"Option 1"},
+	MultipleOptions = false,
+	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Options)
+		getgenv().egg_toHatch = Options[1]
+		auto_hatch()
+	end,
+})
+
+local toggle_autoHatch = Farm:CreateToggle({
+	Name = "Toggle Example",
+	CurrentValue = false,
+	Flag = "Toggle3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		getgenv().auto_hatch = Value
+		auto_hatch()
+	end,
+})
 
 --DEVELOPEMENT TAB--
 local button_UpdateHUB = developement:CreateButton({
