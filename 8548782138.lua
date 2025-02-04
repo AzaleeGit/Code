@@ -35,20 +35,22 @@ local MAIN = Rayfield:CreateWindow({
 })
 
 --VALUE--
---[[getgenv().auto_tap = false
+getgenv().auto_tap = false
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
 
-print(getgenv().auto_tap)]]
+print(getgenv().auto_tap)
 
 --WINDOW--
 local Farm = MAIN:CreateTab("Farming", 4483362458) --Creating a window
 local developement = MAIN:CreateTab("Developement", 4483362458) --Creating a window
 
-local Divider = Farm:CreateDivider()
-local Section_Click = Farm:CreateSection("Farm")
+local Section_Farm = Farm:CreateSection("Farm")
+--FARM TAB--
+--FARM SECTION--
 
---DEVELOPEMENT SECTION--
+
+--DEVELOPEMENT TAB--
 local button_UpdateHUB = developement:CreateButton({
 	Name = "UpdateHUB",
 	Callback = function()
