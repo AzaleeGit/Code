@@ -54,7 +54,7 @@ local Section_Farm = Farm:CreateSection("Farm")
 local button_UpdateHUB = developement:CreateButton({
 	Name = "UpdateHUB",
 	Callback = function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/AzaleeGit/Code/refs/heads/main/CLICKER.lua"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/AzaleeGit/Code/refs/heads/main/8548782138.lua"))()
 		Rayfield:Destroy()
 	end,
 })
