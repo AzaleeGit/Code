@@ -1,6 +1,6 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local Window = Rayfield:CreateWindow({
+local MAIN = Rayfield:CreateWindow({
 	Name = "TheGame",
 	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
 	LoadingTitle = "LOADING THE HUB",
@@ -11,7 +11,7 @@ local Window = Rayfield:CreateWindow({
 	DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
 
 	ConfigurationSaving = {
-		Enabled = true,
+		Enabled = false,
 		FolderName = nil, -- Create a custom folder for your hub/game
 		FileName = "Big Hub"
 	},
@@ -42,7 +42,17 @@ local _player = game:GetService("Players").LocalPlayer
 print(getgenv().auto_tap)]]
 
 --WINDOW--
-local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
-local developement = Window:CreateTab("Developement", 4483362458) --Creating a window
+local Farm = MAIN:CreateTab("Farming", 4483362458) --Creating a window
+local developement = MAIN:CreateTab("Developement", 4483362458) --Creating a window
 
+local Divider = Farm:CreateDivider()
 local Section_Click = Farm:CreateSection("Farm")
+
+--DEVELOPEMENT SECTION--
+local button_UpdateHUB = developement:CreateButton({
+	Name = "UpdateHUB",
+	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/AzaleeGit/Code/refs/heads/main/CLICKER.lua"))()
+		Rayfield:Destroy()
+	end,
+})
