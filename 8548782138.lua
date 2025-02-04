@@ -39,7 +39,7 @@ getgenv().auto_tap = false
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
 function auto_click()
-	while task.wait(.5) do
+	while task.wait() do
 		if getgenv().auto_tap == true then
 			game:GetService("ReplicatedStorage"):WaitForChild("TappingRemote"):WaitForChild("Tap"):FireServer()
 		end
