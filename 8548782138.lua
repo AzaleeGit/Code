@@ -50,6 +50,9 @@ end
 
 function rebirth()
 	while task.wait(1) do
+		local isNumber = tonumber(getgenv().amount_rebirth)
+		if not isNumber then return end
+
 		if getgenv().auto_rebirth == true then
 			game:GetService("ReplicatedStorage"):WaitForChild("Rebirth"):FireServer(tonumber(getgenv().amount_rebirth))
 		end
