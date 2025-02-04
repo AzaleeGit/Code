@@ -38,8 +38,11 @@ local MAIN = Rayfield:CreateWindow({
 getgenv().auto_tap = false
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
-
-print(getgenv().auto_tap)
+local function auto_click()
+	while getgenv().auto_tap == true do
+		game:GetService("ReplicatedStorage"):WaitForChild("TappingRemote"):WaitForChild("Tap"):FireServer()
+	end
+end
 
 --WINDOW--
 local Farm = MAIN:CreateTab("Farming", 4483362458) --Creating a window
@@ -48,6 +51,15 @@ local developement = MAIN:CreateTab("Developement", 4483362458) --Creating a win
 local Section_Farm = Farm:CreateSection("Farm")
 --FARM TAB--
 --FARM SECTION--
+local toggle_autoClick = Farm:CreateToggle({
+	Name = "Auto_Click",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		getgenv().auto_tap = Value
+		auto_click()
+	end,
+})
 
 
 --DEVELOPEMENT TAB--
