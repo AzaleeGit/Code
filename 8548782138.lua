@@ -63,7 +63,7 @@ function rebirth()
 end
 
 function auto_hatch()
-	while task.wait(0.1) do
+	while task.wait() do
 		if getgenv().auto_hatch == true then
 			local findEgg = workspace:WaitForChild("Eggs"):WaitForChild(getgenv().egg_toHatch)
 			if not findEgg then return end
