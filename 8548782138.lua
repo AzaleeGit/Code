@@ -41,6 +41,7 @@ local _player = game:GetService("Players").LocalPlayer
 local function auto_click()
 	while getgenv().auto_tap == true do
 		game:GetService("ReplicatedStorage"):WaitForChild("TappingRemote"):WaitForChild("Tap"):FireServer()
+		task.wait()
 	end
 end
 
@@ -49,7 +50,7 @@ local Farm = MAIN:CreateTab("Farming", 4483362458) --Creating a window
 local developement = MAIN:CreateTab("Developement", 4483362458) --Creating a window
 
 local Section_Farm = Farm:CreateSection("Farm")
---FARM TAB--
+--FARM TAB--a
 --FARM SECTION--
 local toggle_autoClick = Farm:CreateToggle({
 	Name = "Auto_Click",
