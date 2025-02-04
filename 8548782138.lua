@@ -1,14 +1,14 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-	Name = "Game",
+	Name = "TheGame",
 	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-	LoadingTitle = "Loading HUB",
+	LoadingTitle = "LOADING THE HUB",
 	LoadingSubtitle = "by EElAZA",
 	Theme = "DarkBlue", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
 	DisableRayfieldPrompts = false,
-	DisableBuildWarnings = true, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+	DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
 
 	ConfigurationSaving = {
 		Enabled = true,
@@ -34,19 +34,26 @@ local Window = Rayfield:CreateWindow({
 	}
 })
 
+
 if game.GameId ~= 8548782138 then
 	Rayfield:Destroy()
 end
 
 --VALUE--
-getgenv().auto_tap = false
+--[[getgenv().auto_tap = false
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
 
-print(getgenv().auto_tap)
+print(getgenv().auto_tap)]]
 
 --WINDOW--
 local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
 local developement = Window:CreateTab("Developement", 4483362458) --Creating a window
 
 local Section_Click = Farm:CreateSection("Farm")
+
+
+
+
+
+Rayfield:LoadConfiguration()
