@@ -47,3 +47,9 @@ local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
 
 print(getgenv().auto_tap)
+
+--WINDOW--
+local Farm = Window:CreateTab("Farming", 4483362458) --Creating a window
+local developement = Window:CreateTab("Developement", 4483362458) --Creating a window
+
+local Section_Click = Farm:CreateSection("Farm")
