@@ -36,7 +36,7 @@ local MAIN = Rayfield:CreateWindow({
 
 --VALUE--
 getgenv().auto_tap = false
-getgenv().amount_rebirth = 1
+getgenv().amount_rebirth = "1"
 getgenv().auto_rebirth = false
 local _player = game:GetService("Players").LocalPlayer
 --FUNCTIONS--
@@ -88,8 +88,8 @@ local input_rebirth = Farm:CreateInput({
 local toggle_autoRebirth = Farm:CreateToggle({
 	Name = "Auto_Rebirth",
 	CurrentValue = false,
-	Flag = "Toggle2",
-	CallBack = function(Value)
+	Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
 		getgenv().auto_rebirth = Value
 		rebirth()
 	end,
