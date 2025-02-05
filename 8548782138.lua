@@ -118,7 +118,7 @@ local Section_Egg = Farm:CreateSection("Egg")
 
 local dropdown_egg  = Farm:CreateDropdown({
 	Name = "Egg to hatch",
-	Options = {"Basic Egg", "Beach Egg", "Winter Egg"},
+	Options = {"Basic Egg", "Beach Egg", "Winter Egg", "Candy Egg", "Ninja Egg", "Atlantis Egg", "Lab Egg", "Jungle Egg", "Lucid Egg", "VIP Egg", "Lava Egg", "Magic Egg", "Mega Egg", "Mega Space Egg", "Brainrot Egg"},
 	CurrentOption = {"Basic Egg"},
 	MultipleOptions = false,
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -129,7 +129,7 @@ local dropdown_egg  = Farm:CreateDropdown({
 })
 
 local toggle_autoHatch = Farm:CreateToggle({
-	Name = "Toggle Example",
+	Name = "Auto_hatch",
 	CurrentValue = false,
 	Flag = "Toggle3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
@@ -143,6 +143,13 @@ local button_UpdateHUB = developement:CreateButton({
 	Name = "UpdateHUB",
 	Callback = function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/AzaleeGit/Code/refs/heads/main/8548782138.lua"))()
+		Rayfield:Destroy()
+	end,
+})
+
+local button_KillScript = developement:CreateButton({
+	Name = "KillScript",
+	CallBack = function()
 		Rayfield:Destroy()
 	end,
 })
