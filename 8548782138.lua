@@ -38,7 +38,7 @@ local MAIN = Rayfield:CreateWindow({
 getgenv().auto_tap = false
 getgenv().amount_rebirth = "1"
 getgenv().auto_rebirth = false
-getgenv().egg_toHatch = "Basic Egg"
+getgenv().egg_toHatch = nil
 getgenv().auto_hatch = false
 
 local _player = game:GetService("Players").LocalPlayer
