@@ -63,12 +63,11 @@ function rebirth()
 end
 
 function auto_hatch()
-	while task.wait() do
-		if getgenv().auto_hatch == true then
-			local findEgg = workspace:WaitForChild("Eggs"):WaitForChild(getgenv().egg_toHatch)
-			if not findEgg then return end
-			game:GetService("ReplicatedStorage"):WaitForChild("EggHatchingRemote"):WaitForChild("HatchServer"):InvokeServer(workspace:WaitForChild("Eggs"):WaitForChild(getgenv().egg_toHatch))
-		end
+	local findEgg = workspace:WaitForChild("Eggs"):WaitForChild(getgenv().egg_toHatch)
+	if not findEgg then return end
+	while getgenv().auto_hatch == true do
+		game:GetService("ReplicatedStorage"):WaitForChild("EggHatchingRemote"):WaitForChild("HatchServer"):InvokeServer(workspace:WaitForChild("Eggs"):WaitForChild(getgenv().egg_toHatch))
+		task.wait()
 	end
 end
 
