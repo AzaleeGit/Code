@@ -53,9 +53,6 @@ end
 
 function rebirth()
 	while task.wait(1) do
-		local isNumber = tonumber(getgenv().amount_rebirth)
-		if not isNumber then return end
-
 		if getgenv().auto_rebirth == true then
 			game:GetService("ReplicatedStorage"):WaitForChild("Rebirth"):FireServer(tonumber(getgenv().amount_rebirth))
 		end
@@ -63,10 +60,8 @@ function rebirth()
 end
 
 function auto_hatch()
-	local findEgg = workspace:WaitForChild("Eggs"):WaitForChild(getgenv().egg_toHatch)
-	if not findEgg then return end
 	while getgenv().auto_hatch == true do
-		game:GetService("ReplicatedStorage"):WaitForChild("EggHatchingRemote"):WaitForChild("HatchServer"):InvokeServer(workspace:WaitForChild("Eggs"):WaitForChild(getgenv().egg_toHatch))
+		game:GetService("ReplicatedStorage"):WaitForChild("EggHatchingRemote"):WaitForChild("HatchServer"):InvokeServer(getgenv().egg_toHatch)
 		task.wait()
 	end
 end
@@ -98,6 +93,8 @@ local input_rebirth = Farm:CreateInput({
 	RemoveTextAfterFocusLost = false,
 	Flag = "Input1",
 	Callback = function(Text)
+		local isNumber = tonumber(Text)
+		if not isNumber then return end
 		getgenv().amount_rebirth = Text
 		rebirth()
 	end,
@@ -123,7 +120,9 @@ local dropdown_egg  = Farm:CreateDropdown({
 	MultipleOptions = false,
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Options)
-		getgenv().egg_toHatch = Options[1]
+		local findEgg = workspace:WaitForChild("Eggs"):WaitForChild(Options[1])
+		if not findEgg then return end
+		getgenv().egg_toHatch = findEgg
 		auto_hatch()
 	end,
 })
