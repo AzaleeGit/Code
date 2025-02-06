@@ -35,8 +35,15 @@ local MAIN = Rayfield:CreateWindow({
 })
 
 --VALUE--
+getgenv().egg_toHatch = nil
+getgenv().auto_hatch = false
 
 --FUNCTIONS--
+function auto_hatch()
+	while getgenv().auto_hatch == true do
+		game:GetService("ReplicatedStorage").PetSystem.Remote.Hatch:InvokeServer(getgenv().egg_toHatch, "Open")
+	end
+end
 
 
 --WINDOW--
@@ -46,6 +53,33 @@ local developement = MAIN:CreateTab("Developement", 4483362458) --Creating a win
 
 --FARM TAB--
 --FARM SECTION--
+
+--EGG SECTION--
+local Section_Egg = Farm:CreateSection("Egg")
+
+local dropdown_egg  = Farm:CreateDropdown({
+	Name = "Egg to hatch",
+	Options = {"Exclusive Pirate Egg"},
+	CurrentOption = {"Exclusive Pirate Egg"},
+	MultipleOptions = false,
+	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Options)
+		local findEgg = workspace:WaitForChild("EggModels"):WaitForChild(Options[1])
+		if not findEgg then return end
+		getgenv().egg_toHatch = Options[1]
+		auto_hatch()
+	end,
+})
+
+local toggle_autoHatch = Farm:CreateToggle({
+	Name = "Auto_hatch",
+	CurrentValue = false,
+	Flag = "Toggle3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		getgenv().auto_hatch = Value
+		auto_hatch()
+	end,
+})
 
 --DEVELOPEMENT TAB--
 local button_UpdateHUB = developement:CreateButton({
