@@ -42,6 +42,7 @@ getgenv().auto_hatch = false
 function auto_hatch()
 	while getgenv().auto_hatch == true do
 		game:GetService("ReplicatedStorage").PetSystem.Remote.Hatch:InvokeServer(getgenv().egg_toHatch, "Open")
+		task.wait(1)
 	end
 end
 
