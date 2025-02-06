@@ -61,7 +61,7 @@ end
 
 function auto_hatch()
 	while getgenv().auto_hatch == true do
-		game:GetService("ReplicatedStorage"):WaitForChild("EggHatchingRemote"):WaitForChild("HatchServer"):InvokeServer(getgenv().egg_toHatch)
+		game:GetService("ReplicatedStorage").EggHatchingRemote.HatchServer:InvokeServer(getgenv().egg_toHatch)
 	end
 end
 
