@@ -62,7 +62,7 @@ end
 function auto_hatch()
 	while getgenv().auto_hatch == true do
 		game:GetService("ReplicatedStorage"):WaitForChild("EggHatchingRemote"):WaitForChild("HatchServer"):InvokeServer(getgenv().egg_toHatch)
-		task.wait()
+		task.wait(0.000000000000000000000000000000001)
 	end
 end
 
@@ -126,7 +126,7 @@ local dropdown_egg  = Farm:CreateDropdown({
 		auto_hatch()
 	end,
 })
-
+ 
 local toggle_autoHatch = Farm:CreateToggle({
 	Name = "Auto_hatch",
 	CurrentValue = false,
