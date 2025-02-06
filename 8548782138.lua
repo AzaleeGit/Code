@@ -61,7 +61,8 @@ end
 
 function auto_hatch()
 	while getgenv().auto_hatch == true do
-		game:GetService("ReplicatedStorage").EggHatchingRemote.HatchServer:InvokeServer(getgenv().egg_toHatch)
+		game:GetService("ReplicatedStorage"):WaitForChild("EggHatchingRemote"):WaitForChild("HatchServer"):InvokeServer(getgenv().egg_toHatch)
+		task.wait()
 	end
 end
 
@@ -114,7 +115,7 @@ local Section_Egg = Farm:CreateSection("Egg")
 
 local dropdown_egg  = Farm:CreateDropdown({
 	Name = "Egg to hatch",
-	Options = {"Basic Egg", "Beach Egg", "Winter Egg", "Candy Egg", "Ninja Egg", "Atlantis Egg", "Lab Egg", "Jungle Egg", "Lucid Egg", "VIP Egg", "Lava Egg", "Magic Egg", "Mega Egg", "Mega Space Egg", "Brainrot Egg", "Overseer Egg", "Space Merchant Egg"},
+	Options = {"Basic Egg", "Beach Egg", "Winter Egg", "Candy Egg", "Ninja Egg", "Atlantis Egg", "Lab Egg", "Jungle Egg", "Lucid Egg", "VIP Egg", "Lava Egg", "Magic Egg", "Mega Egg", "Mega Space Egg", "Brainrot Egg", "Overseer Egg", "Space Merchant Egg", "Darkness Egg"},
 	CurrentOption = {"Basic Egg"},
 	MultipleOptions = false,
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
