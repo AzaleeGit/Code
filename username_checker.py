@@ -29,7 +29,7 @@ include_digits = True
 # Create a new event loop for asyncio
 asyncio_loop = asyncio.new_event_loop()
 
-
+# Function to generate random usernames (3-10 characters)
 def generate_username():
     characters = string.ascii_lowercase
     if include_digits:
@@ -40,7 +40,15 @@ def generate_username():
 async def check_username_status(username, session):
     global total_checked, available_count
     payload = {"username": username, "context": "Signup"}
-    headers = {"User-Agent": "Brave/120.0.0.0 Chrome/120.0.0.0 Safari/537.36"}
+    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Origin": "https://www.roblox.com",
+        "Referer": "https://www.roblox.com/",
+        "Connection": "keep-alive",
+    }
 
     try:
         async with session.post(ROBLOX_USERNAME_CHECK_URL, json=payload, headers=headers, timeout=5) as response:
@@ -60,11 +68,15 @@ async def check_username_status(username, session):
                     return f"🚫 {username} is Censored"
                 elif code == 3:
                     return f"⚠ Invalid Username"
+            elif response.status == 403:
+                # If we receive a 403, log the response body to better understand the error.
+                error_data = await response.json()
+                return f"❌ 403 Forbidden: {error_data.get('errorMessage', 'Unknown error')}"
             return f"⚠ Unknown Error {response.status}"
     except asyncio.TimeoutError:
         return f"❌ Timeout Error ({username})"
     except Exception as e:
-        return f"❌ Network Error ({username})"
+        return f"❌ Network Error ({username}): {str(e)}"
 
 
 async def send_discord_notification(username):
