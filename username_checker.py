@@ -23,11 +23,13 @@ total_checked = 0
 available_count = 0
 
 # Default settings
-username_length = 5  # Default length
-include_digits = True  # Default: include numbers
+username_length = 5
+include_digits = True
+
+# Create a new event loop for asyncio
+asyncio_loop = asyncio.new_event_loop()
 
 
-# Generate a random username based on user settings
 def generate_username():
     characters = string.ascii_lowercase
     if include_digits:
@@ -35,7 +37,6 @@ def generate_username():
     return ''.join(random.choice(characters) for _ in range(username_length))
 
 
-# Async function to check username availability
 async def check_username_status(username, session):
     global total_checked, available_count
     payload = {"username": username, "context": "Signup"}
@@ -66,41 +67,37 @@ async def check_username_status(username, session):
         return f"❌ Network Error ({username})"
 
 
-# Async function to send a Discord notification
 async def send_discord_notification(username):
     payload = {"content": f"🔥 Available Roblox Username Found: **{username}**"}
     headers = {"Content-Type": "application/json"}
 
     async with aiohttp.ClientSession() as session:
         async with session.post(DISCORD_WEBHOOK_URL, json=payload, headers=headers, timeout=5):
-            pass  # Ignore errors
+            pass
 
 
-# Async task to run multiple username checks in parallel
 async def run_username_checks(log_function):
     global running, total_checked
 
     async with aiohttp.ClientSession() as session:
         while running:
-            usernames = [generate_username() for _ in range(NUM_TASKS)]  # Batch checking
+            usernames = [generate_username() for _ in range(NUM_TASKS)]
             tasks = [check_username_status(username, session) for username in usernames]
             results = await asyncio.gather(*tasks)
 
             total_checked += len(usernames)
 
-            # ✅ Update UI safely using Kivy's main thread
             for result in results:
                 Clock.schedule_once(lambda dt: log_function(f"{result} | Checked: {total_checked}, Found: {available_count}"))
 
-            await asyncio.sleep(0.5)  # Adjust this to avoid rate limits
+            await asyncio.sleep(0.5)
 
 
-# Wrapper function to run asyncio inside a thread
 def start_async_check(log_function):
-    asyncio.run(run_username_checks(log_function))
+    asyncio.set_event_loop(asyncio_loop)
+    asyncio_loop.run_until_complete(run_username_checks(log_function))
 
 
-# Kivy UI
 class UsernameCheckerApp(App):
     def build(self):
         self.layout = BoxLayout(orientation='vertical')
@@ -110,7 +107,6 @@ class UsernameCheckerApp(App):
         scroll_view.add_widget(self.log_box)
         self.layout.add_widget(scroll_view)
 
-        # Username length slider
         length_layout = BoxLayout(size_hint=(1, 0.1))
         self.length_label = Label(text="Username Length: 5", size_hint=(0.4, 1))
         self.length_slider = Slider(min=3, max=10, value=5, step=1, size_hint=(0.6, 1))
@@ -119,7 +115,6 @@ class UsernameCheckerApp(App):
         length_layout.add_widget(self.length_slider)
         self.layout.add_widget(length_layout)
 
-        # Toggle button for including digits
         self.toggle_button = ToggleButton(text="Include Digits: ON", state="down", size_hint=(1, 0.1))
         self.toggle_button.bind(on_press=self.toggle_digits)
         self.layout.add_widget(self.toggle_button)
@@ -138,7 +133,6 @@ class UsernameCheckerApp(App):
         return self.layout
 
     def log_message(self, message):
-        """ ✅ Safe UI update using Kivy main thread """
         self.log_box.text += message + "\n"
 
     def start_checker(self, instance):
@@ -147,7 +141,6 @@ class UsernameCheckerApp(App):
             running = True
             self.log_message(f"🚀 Starting username checker... Length: {username_length}, Digits: {'ON' if include_digits else 'OFF'}")
 
-            # ✅ Run async function in a separate thread
             thread = threading.Thread(target=start_async_check, args=(self.log_message,), daemon=True)
             thread.start()
 
@@ -167,6 +160,5 @@ class UsernameCheckerApp(App):
         self.toggle_button.text = f"Include Digits: {'ON' if include_digits else 'OFF'}"
 
 
-# Run the Kivy App
 if __name__ == "__main__":
     UsernameCheckerApp().run()
