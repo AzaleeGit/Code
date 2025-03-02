@@ -1,7 +1,8 @@
-import aiohttp
 import asyncio
+import aiohttp
 import random
 import string
+import threading
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -94,6 +95,11 @@ async def run_username_checks(log_function):
             await asyncio.sleep(0.5)  # Adjust this to avoid rate limits
 
 
+# Wrapper function to run asyncio inside a thread
+def start_async_check(log_function):
+    asyncio.run(run_username_checks(log_function))
+
+
 # Kivy UI
 class UsernameCheckerApp(App):
     def build(self):
@@ -140,7 +146,10 @@ class UsernameCheckerApp(App):
         if not running:
             running = True
             self.log_message(f"🚀 Starting username checker... Length: {username_length}, Digits: {'ON' if include_digits else 'OFF'}")
-            asyncio.create_task(run_username_checks(self.log_message))  # ✅ Run async function in background
+
+            # ✅ Run async function in a separate thread
+            thread = threading.Thread(target=start_async_check, args=(self.log_message,), daemon=True)
+            thread.start()
 
     def stop_checker(self, instance):
         global running
