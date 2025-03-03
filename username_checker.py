@@ -5,9 +5,9 @@ import os
 import threading
 import tkinter as tk
 from tkinter import ttk, scrolledtext
-from colorama import Fore, Style, init
+from colorama import init
 
-# Initialize color output
+# Initialize colorama
 init()
 
 # Ensure the valid username file exists
@@ -62,15 +62,18 @@ class UsernameCheckerApp:
         self.stop_button.pack()
 
         # Result Output Box
-        self.output_box = scrolledtext.ScrolledText(root, width=60, height=15, state="disabled")
+        self.output_box = scrolledtext.ScrolledText(root, width=60, height=15, state="normal", font=("Courier", 10))
         self.output_box.pack(pady=10)
+        self.output_box.tag_config("valid", foreground="green")
+        self.output_box.tag_config("taken", foreground="red")
+        self.output_box.tag_config("censored", foreground="orange")
 
         self.running = False  # Flag to control threads
 
-    def log_message(self, message, color="black"):
-        """ Logs messages in the GUI output box. """
+    def log_message(self, message, tag="normal"):
+        """ Logs messages in the GUI output box with colors. """
         self.output_box.config(state="normal")
-        self.output_box.insert(tk.END, message + "\n")
+        self.output_box.insert(tk.END, message + "\n", tag)
         self.output_box.config(state="disabled")
         self.output_box.yview(tk.END)  # Auto-scroll
 
@@ -102,7 +105,7 @@ class UsernameCheckerApp:
                 code = response_data.get("code")
                 
                 if code == 0:  # Available
-                    self.log_message(f"[VALID] | {username}", "green")
+                    self.log_message(f"[VALID] | {username}", "valid")
                     self.send_discord_notification(username)
                     with buffer_lock:
                         valid_usernames.append(f"{username} | {len(username)}\n")
@@ -114,11 +117,11 @@ class UsernameCheckerApp:
                 elif code == 1:  # Taken
                     with taken_lock:
                         taken_counter += 1
-                        if taken_counter % 10 == 0:
-                            self.log_message(f"[TAKEN] | {username}", "red")
+                        if taken_counter % 10 == 0:  # Reduce spam
+                            self.log_message(f"[TAKEN] | {username}", "taken")
 
                 elif code == 2:  # Censored
-                    self.log_message(f"[CENSORED] | {username}", "yellow")
+                    self.log_message(f"[CENSORED] | {username}", "censored")
 
             except requests.exceptions.RequestException:
                 pass
