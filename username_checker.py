@@ -1,122 +1,125 @@
 import requests
 import random
 import string
+import os
 import threading
-import time
+from colorama import Fore, Style, init
 
-# Roblox API for checking username availability
-ROBLOX_USERNAME_CHECK_URL = "https://auth.roblox.com/v1/usernames/validate"
+# Initialize color output
+init()
 
-# Replace with your actual Discord Webhook URL (if you want notifications)
-DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL"
+# Ensure the valid username file exists
+if not os.path.exists("valid_username.txt"):
+    open("valid_username.txt", "w").close()
 
-NUM_THREADS = 5  # Number of threads to use for checking
-running = False  # Global flag to control checking
+# Discord Webhook URL (replace with your webhook)
+DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1226527204423241791/sSa3dSPW-vWmp9iuWxVYdPxG89M6G_HcRVjCERAg9FDzshyadePxvB5sErD-GYXXN5_Y"
 
-# Function to generate random usernames
-def generate_username(length=5, use_digits=True):
-    characters = string.ascii_lowercase
-    if use_digits:
-        characters += string.digits
-    return ''.join(random.choice(characters) for _ in range(length))
+# Character sets
+character = string.ascii_letters + string.digits
+lower = string.ascii_lowercase
+upper = string.ascii_uppercase
+digits = string.digits
 
-# Function to check username availability
-def check_username_status(username, session):
-    payload = {"username": username, "context": "Signup"}
-    headers = {"User-Agent": "Mozilla/5.0"}
+# User input for username length and type
+username_length = int(input("How long should the username be? : "))
+username_type = input(
+    "What type of username do you want?\n"
+    "[1] | All characters\n"
+    "[2] | Only letters\n"
+    "[3] | Only lowercase\n"
+    "[4] | Only uppercase\n"
+    "[5] | Only digits\n"
+    "Answer: "
+)
 
-    try:
-        response = session.post(ROBLOX_USERNAME_CHECK_URL, json=payload, headers=headers, timeout=5)
-        if response.status_code == 200:
-            data = response.json()
-            code = data.get("code", -1)
+# Define character selection based on user choice
+if username_type == "1":
+    selected_chars = character
+elif username_type == "2":
+    selected_chars = string.ascii_letters
+elif username_type == "3":
+    selected_chars = lower
+elif username_type == "4":
+    selected_chars = upper
+elif username_type == "5":
+    selected_chars = digits
+else:
+    print(Fore.RED + "Invalid choice, using all characters." + Style.RESET_ALL)
+    selected_chars = character
 
-            if code == 0:
-                return "✅ Available"
-            elif code == 1:
-                return "❌ Taken"
-            elif code == 2:
-                return "🚫 Censored"
-            elif code == 3:
-                return "⚠ Invalid"
-        return "⚠ Unknown Error"
-    except requests.exceptions.RequestException:
-        return "❌ Network Error"
+# Use a session for faster requests
+session = requests.Session()
+
+# Buffer for bulk writing to file
+valid_usernames = []
+buffer_lock = threading.Lock()  # Prevent multiple threads from writing at the same time
+
+# Counter to limit "TAKEN" prints
+taken_counter = 0
+taken_lock = threading.Lock()
+
+# Function to generate a random username quickly
+def generate_username(length):
+    return ''.join(selected_chars[b % len(selected_chars)] for b in os.urandom(length))
 
 # Function to send a Discord notification
 def send_discord_notification(username):
-    payload = {"content": f"🔥 Available Roblox Username Found: **{username}**"}
-    headers = {"Content-Type": "application/json"}
-
     try:
-        requests.post(DISCORD_WEBHOOK_URL, json=payload, headers=headers, timeout=5)
+        payload = {"content": f"✅ **Valid Roblox Username Found!** 🎉\n`{username}`"}
+        requests.post(DISCORD_WEBHOOK, json=payload, timeout=5)
     except requests.exceptions.RequestException:
-        pass  # Ignore errors if Discord webhook fails
+        pass  # Ignore errors to avoid slowdowns
 
-# Background function to check usernames
-def check_usernames(length, use_digits):
-    session = requests.Session()
-    checked = 0
-    found = 0
-    while running:
-        username = generate_username(length, use_digits)
-        status = check_username_status(username, session)
-        checked += 1
+# Function to check username availability
+def check_username():
+    global valid_usernames, taken_counter
+    while True:
+        username = generate_username(username_length)
+        url = f"https://auth.roblox.com/v1/usernames/validate?Username={username}&Birthday=2000-01-01"
 
-        # Log the status
-        print(f"{username} → {status}")
+        try:
+            response = session.get(url, timeout=3)
+            response.raise_for_status()
+            response_data = response.json()
 
-        if status == "✅ Available":
-            found += 1
-            with open("available_usernames.txt", "a") as file:
-                file.write(username + "\n")
-            send_discord_notification(username)
+            code = response_data.get("code")
+            
+            if code == 0:  # Available username
+                print(Fore.GREEN + f"[VALID] | {username}" + Style.RESET_ALL)
+                send_discord_notification(username)  # Send to Discord
+                with buffer_lock:
+                    valid_usernames.append(f"{username} | {len(username)}\n")
 
-        # Report checked and found usernames
-        print(f"Checked: {checked}, Found: {found}")
+                    # Write in bulk every 10 usernames to reduce file I/O overhead
+                    if len(valid_usernames) >= 10:
+                        with open("valid_username.txt", "a") as file:
+                            file.writelines(valid_usernames)
+                        valid_usernames.clear()
+            
+            elif code == 1:  # Username is taken
+                with taken_lock:
+                    taken_counter += 1
+                    if taken_counter % 10 == 0:  # Print only 1 out of every 10 taken usernames
+                        print(Fore.RED + f"[TAKEN] | {username}" + Style.RESET_ALL)
+            
+            elif code == 2:  # Username is censored (filtered by Roblox)
+                print(Fore.YELLOW + f"[CENSORED] | {username}" + Style.RESET_ALL)
 
-        time.sleep(0.2)  # Prevent IP ban
+        except requests.exceptions.RequestException:
+            pass  # Ignore failed requests for maximum speed
 
-# Function to start the checker
-def start_checker(length, use_digits):
-    global running
-    if not running:
-        running = True
-        print("🚀 Starting username checker...")
-        for _ in range(NUM_THREADS):
-            thread = threading.Thread(target=check_usernames, args=(length, use_digits), daemon=True)
-            thread.start()
-
-# Function to stop the checker
-def stop_checker():
-    global running
-    running = False
-    print("🛑 Stopping username checker...")
-
-# Main program
-def main():
-    print("Welcome to the Roblox Username Checker!")
-    
-    # Get the length of the username from user input
-    try:
-        length = int(input("Enter the length of the username: "))
-    except ValueError:
-        print("Invalid input! Using default length of 5.")
-        length = 5
-
-    # Ask if digits should be included in the username
-    use_digits_input = input("Include digits in the username? (y/n): ").lower()
-    use_digits = use_digits_input == 'y'
-
-    # Start the username checking process
-    start_checker(length, use_digits)
-
-    try:
-        while True:
-            # Keep the program running, check periodically
-            time.sleep(1)
-    except KeyboardInterrupt:
-        stop_checker()
-
+# Limit to 10 threads
+num_threads = 10
+# Start multi-threaded checking
 if __name__ == "__main__":
-    main()
+    threads = []
+    for _ in range(num_threads):
+        thread = threading.Thread(target=check_username)
+        thread.daemon = True  # Allows threads to close when main program stops
+        thread.start()
+        threads.append(thread)
+
+    # Keep the main thread alive to let worker threads run
+    for thread in threads:
+        thread.join()
