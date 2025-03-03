@@ -68,7 +68,8 @@ class UsernameCheckerApp:
         self.output_box.tag_config("taken", foreground="red")
         self.output_box.tag_config("censored", foreground="orange")
 
-        self.running = False  # Flag to control threads
+        self.stop_event = threading.Event()  # Event to stop threads
+        self.threads = []  # Store threads
 
     def log_message(self, message, tag="normal"):
         """ Logs messages in the GUI output box with colors. """
@@ -93,7 +94,7 @@ class UsernameCheckerApp:
     def check_username(self):
         """ Checks if a username is available. """
         global valid_usernames, taken_counter
-        while self.running:
+        while not self.stop_event.is_set():  # Instead of while True, check stop event
             username = self.generate_username(self.username_length.get())
             url = f"https://auth.roblox.com/v1/usernames/validate?Username={username}&Birthday=2000-01-01"
 
@@ -128,27 +129,27 @@ class UsernameCheckerApp:
 
     def start_checker(self):
         """ Starts the username checking process in a separate thread. """
-        if not self.running:
-            self.running = True
-            self.start_button.config(state="disabled")
-            self.stop_button.config(state="normal")
+        self.stop_event.clear()  # Reset stop event
+        self.start_button.config(state="disabled")
+        self.stop_button.config(state="normal")
 
-            self.threads = []
-            for _ in range(10):  # 10 threads for speed
-                thread = threading.Thread(target=self.check_username)
-                thread.daemon = True
-                thread.start()
-                self.threads.append(thread)
+        self.threads = []
+        for _ in range(10):  # 10 threads for speed
+            thread = threading.Thread(target=self.check_username)
+            thread.daemon = True
+            thread.start()
+            self.threads.append(thread)
 
     def stop_checker(self):
         """ Stops the username checking process. """
-        self.running = False
+        self.stop_event.set()  # Signal threads to stop
+
         self.start_button.config(state="normal")
         self.stop_button.config(state="disabled")
 
-        # Wait for threads to finish
+        # Wait for threads to stop safely
         for thread in self.threads:
-            thread.join()
+            thread.join(timeout=1)  # Give threads a chance to exit safely
 
 # Run GUI
 if __name__ == "__main__":
