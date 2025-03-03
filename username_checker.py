@@ -10,9 +10,10 @@ from colorama import init
 # Initialize colorama
 init()
 
-# Ensure the valid username file exists
+# Ensure the valid_username.txt file exists
 if not os.path.exists("valid_username.txt"):
-    open("valid_username.txt", "w").close()
+    with open("valid_username.txt", "w") as file:
+        file.write("")  # Create an empty file
 
 # Discord Webhook URL (replace with your webhook)
 DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1226527204423241791/sSa3dSPW-vWmp9iuWxVYdPxG89M6G_HcRVjCERAg9FDzshyadePxvB5sErD-GYXXN5_Y"
